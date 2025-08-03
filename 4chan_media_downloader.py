@@ -5,9 +5,23 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 import os
 import requests
+import sys
 
 driver = webdriver.Chrome()
-driver.get('https://boards.4chan.org/b/thread/123456789')  # Replace with the actual thread URL
+if len(sys.argv) == 2:
+    url = sys.argv[1]
+else:
+    print("Usage: python 4chan_media_downloader.py <thread_url>")
+    sys.exit(1)
+
+driver.get(url)
+
+if "4chan.org" not in url:
+    print("Please provide a valid 4chan thread URL.")
+    driver.quit()
+    sys.exit(1)
+else:
+    print(f"Fetching media from: {url}")
 
 try:
     WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, 'fileThumb')))
